@@ -13,15 +13,21 @@ export default defineConfig({
             imports: ["vue", "vue-router", "vuex"],
         }),
         Components({
-            resolvers: [ElementPlusResolver()],
+            resolvers: [ElementPlusResolver({ importStyle: "sass" })],
         }),
     ],
-    build: {
-        // 配置别名
-        resolve: {
-            alias: {
-                "~": `${path.resolve(__dirname, "./src")}`,
+    // 配置别名
+    resolve: {
+        alias: {
+            "~": `${path.resolve(__dirname, "./src")}`,
+        },
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `@use "~/assets/style/sass/element.scss" as *;`,
             },
         },
     },
+    build: {},
 });
