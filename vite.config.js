@@ -1,18 +1,27 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import externalGlobals from 'rollup-plugin-external-globals'
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+
+import path from "path";
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [
+        vue(),
+        AutoImport({
+            resolvers: [ElementPlusResolver()],
+            imports: ["vue", "vue-router", "vuex"],
+        }),
+        Components({
+            resolvers: [ElementPlusResolver()],
+        }),
+    ],
     build: {
-        // 打包时不打包elementPlus
-        rollupOptions: {
-            external: ['vue', 'element-plus'],
-            plugins: [
-                externalGlobals({
-                    vue: 'Vue',
-                    'element-plus': 'ElementPlus',
-                })
-            ]
-        }
-    }
-})
+        // 配置别名
+        resolve: {
+            alias: {
+                "~": `${path.resolve(__dirname, "./src")}`,
+            },
+        },
+    },
+});
